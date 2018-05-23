@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "808505129402",
+    "firebase_url": "https://shefaa-a4632.firebaseio.com",
+    "project_id": "shefaa-a4632",
+    "storage_bucket": "shefaa-a4632.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:808505129402:android:c8ab5ee6869669e6",
+        "android_client_info": {
+          "package_name": "com.example2017.android.shefaa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "808505129402-ati2aq9u0lqc51cd66s9dlus55ie97j4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example2017.android.shefaa",
+            "certificate_hash": "b13d4f61873cd578287c1202b73d5ac4f4a9bb32"
+          }
+        },
+        {
+          "client_id": "808505129402-6dhihiqo429us7oorugkeaq05cfv57tn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEDy3ZK2zJsN5dG1-BcrAB2z3En5ElGuM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "808505129402-6dhihiqo429us7oorugkeaq05cfv57tn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
