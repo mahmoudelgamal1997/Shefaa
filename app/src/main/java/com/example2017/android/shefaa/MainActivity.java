@@ -6,20 +6,48 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
+import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    DatabaseReference catorgy;
+    ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        listView=(ListView)findViewById(R.id.listview_catorgy);
+        catorgy= FirebaseDatabase.getInstance().getReference().child("Catorgy");
 
+        FirebaseListAdapter<String> firebaseListAdapter=new FirebaseListAdapter<String>(
+                this,
+                String.class,
+                R.layout.listview_catorgy_item,
+                catorgy
+        ) {
+            @Override
+            protected void populateView(View v, String model, int position) {
+
+                TextView txt=(TextView)v.findViewById(R.id.txt_catorgy);
+                txt.setText(model);
+            }
+        };
+
+
+        listView.setAdapter(firebaseListAdapter);
 
     }
 
