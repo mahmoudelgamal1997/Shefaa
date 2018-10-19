@@ -2,7 +2,7 @@
     <string name="app_name">Shefaa</string>
     <string name="pass_hint">Password...</string>
     <string name="email_hint">Your Email...</string>
-    <string name="login_logo_desc">Logo Login Page</string>
+    <string name="Username"> Username </string>
     <string name="login_btn_text">Login to account</string>
     <string name="login_reg_btn_text">Need a new Account?</string>
     <string name="action_search_text">Search</string>

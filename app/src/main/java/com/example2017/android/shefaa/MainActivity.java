@@ -1,36 +1,80 @@
 package com.example2017.android.shefaa;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.util.SortedList;
+import android.support.v7.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.squareup.picasso.Callback;
 
 import com.firebase.client.Firebase;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     DatabaseReference catorgy;
+    DatabaseReference users;
     ListView listView;
+    ImageView  ProfileImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         listView=(ListView)findViewById(R.id.listview_catorgy);
+        ProfileImage=(ImageView)findViewById(R.id.profile_image);
         catorgy= FirebaseDatabase.getInstance().getReference().child("Catorgy");
+        users=FirebaseDatabase.getInstance().getReference().child("Users");
+        final FirebaseUser firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
+        users.child(firebaseUser.getUid().toString()).child("ProfileImage").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                final String imageuri=dataSnapshot.getValue(String.class);
+
+                Picasso.with(getApplicationContext()).load(imageuri).networkPolicy(NetworkPolicy.OFFLINE).into(ProfileImage, new Callback() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onError() {
+
+                        Picasso.with(getApplicationContext()).load(imageuri).into(ProfileImage);
+                    }
+                });
+
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
         FirebaseListAdapter<String> firebaseListAdapter=new FirebaseListAdapter<String>(
                 this,
@@ -113,5 +157,8 @@ public class MainActivity extends AppCompatActivity {
         FirebaseAuth.getInstance().signOut();
 
     }
+
+
+
     }
 
