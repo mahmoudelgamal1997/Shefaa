@@ -54,14 +54,15 @@ public class WritePost extends AppCompatActivity {
                     temp.child("PostTime").setValue(OrganizeTime());
                     temp.child("UserId").setValue(id);
 
-                    users.child(id).child("ProfileImage").addValueEventListener(new ValueEventListener() {
+                    users.child(id).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
 
 
-                            String image = dataSnapshot.getValue(String.class);
-                            temp.child("ProfileImage").setValue(image);
-
+                            String image = dataSnapshot.child("ProfileImage").getValue(String.class);
+                            String name  = dataSnapshot.child("name").getValue(String.class);
+                            temp.child("UserImage").setValue(image);
+                            temp.child("PostUserName").setValue(name);
                         }
 
                         @Override

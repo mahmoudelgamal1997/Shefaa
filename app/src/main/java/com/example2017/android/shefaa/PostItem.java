@@ -4,8 +4,11 @@ package com.example2017.android.shefaa;
  * Created by M7moud on 19-Oct-18.
  */
 public class PostItem {
-    String  PostText,PostTime,PostId,UserId,UserImage;
+    String  PostText,PostTime,PostId,PostUserName,UserId,UserImage;
 
+    public String getPostUserName() {
+        return PostUserName;
+    }
 
     public PostItem() {
     }

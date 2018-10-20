@@ -43,7 +43,7 @@
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/profile_image"
             android:text="@string/Username"
-            android:textSize="25dp"
+            android:textSize="20dp"
             android:layout_marginTop="5dp"
             android:layout_gravity="top"
             />
@@ -54,7 +54,7 @@
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/profile_image"
             android:text="@string/Time"
-            android:textSize="25dp"
+            android:textSize="16dp"
             android:id="@+id/TextTime"
             android:layout_below="@+id/Text_username"
             android:layout_marginTop="2dp"
@@ -64,10 +64,11 @@
 
         <TextView
             android:id="@+id/textView_desc"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             tools:text="Your Text"
+            android:padding="8dp"
+            android:textDirection="anyRtl"
             android:layout_below="@+id/profile_image"
             android:layout_marginTop="15dp"
             android:fontFamily="sans-serif"

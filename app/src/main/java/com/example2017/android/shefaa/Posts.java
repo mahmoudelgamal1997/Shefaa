@@ -72,7 +72,7 @@ public class Posts extends AppCompatActivity {
             protected void populateViewHolder(Post_viewholder viewHolder, final PostItem model, int position)
             {
 
-                viewHolder.SetTitle(model.getPostText(),model.PostTime);
+                viewHolder.SetTitle(model.getPostText(),model.PostTime,model.getPostUserName());
                 viewHolder.SetImage(getApplicationContext(),model.getUserImage());
 
             }
@@ -95,11 +95,13 @@ public class Posts extends AppCompatActivity {
 
         }
 
-        public void SetTitle(String Text,String Time) {
+        public void SetTitle(String Text,String Time,String UserName) {
 
             TextView describtion = (TextView) view.findViewById(R.id.textView_desc);
             TextView PostTime = (TextView) view.findViewById(R.id.TextTime);
+            TextView Name = (TextView)view.findViewById(R.id.Text_username);
 
+            Name.setText(UserName);
             describtion.setText(Text);
             PostTime.setText(Time);
 
