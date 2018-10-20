@@ -3,8 +3,8 @@
     <string name="pass_hint">Password...</string>
     <string name="email_hint">Your Email...</string>
     <string name="Username"> Username </string>
-    <string name="login_btn_text">Login to account</string>
-    <string name="login_reg_btn_text">Need a new Account?</string>
+    <string name="YourText"> YourText </string>
+    <string name="Time">Time</string>
     <string name="action_search_text">Search</string>
     <string name="action_setting_text">Account Settings</string>
     <string name="action_logout_text">Logout</string>

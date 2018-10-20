@@ -83,10 +83,20 @@ public class MainActivity extends AppCompatActivity {
                 catorgy
         ) {
             @Override
-            protected void populateView(View v, String model, int position) {
+            protected void populateView(View v, final String model, int position) {
 
                 TextView txt=(TextView)v.findViewById(R.id.txt_catorgy);
                 txt.setText(model);
+
+                v.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                    Intent intent=new Intent(MainActivity.this,Posts.class);
+                    intent.putExtra("Catorgy",model);
+                    startActivity(intent);
+
+                    }
+                });
             }
         };
 
@@ -124,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
 
             break;
 
-        case R.id.search:
 
             }
 

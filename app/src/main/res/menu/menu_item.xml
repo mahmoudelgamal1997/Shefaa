@@ -10,11 +10,7 @@
         android:title="Logout"
         ></item>
 
-    <item android:id="@+id/search"
-        android:title="@string/action_search_text"
-        app:showAsAction="ifRoom"
-        android:icon="@mipmap/action_search"
-        ></item>
+    
 
 
 </menu>
