@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -35,7 +36,7 @@
         android:id="@+id/editText_reg_email"
         android:hint="@string/email_hint"
         android:layout_below="@+id/editText_username"
-        android:layout_marginTop="19dp" />
+        android:layout_marginTop="9dp" />
 
     <EditText
         android:layout_width="match_parent"
@@ -43,17 +44,48 @@
         android:id="@+id/editText_reg_pass"
         android:hint="@string/pass_hint"
         android:layout_below="@+id/editText_reg_email"
-        android:layout_marginTop="19dp" />
+        android:layout_marginTop="9dp" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editText_reg_pass_confirm"
         android:hint="Confirm Pass"
-        android:layout_marginTop="19dp"
+        android:layout_marginTop="9dp"
         android:layout_below="@+id/editText_reg_pass"
         />
 
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/radioGroup"
+        android:orientation="horizontal"
+        android:layout_below="@+id/editText_reg_pass_confirm">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/patient"
+            android:id="@+id/patient"
+            />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/doctor"
+            android:layout_marginLeft="5dp"
+            android:id="@+id/doctor"
+            />
+    </RadioGroup>
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/specialist_spinner"
+        android:layout_below="@+id/radioGroup"
+
+        >
+
+    </Spinner>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

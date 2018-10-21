@@ -1,6 +1,7 @@
 package com.example2017.android.shefaa;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.media.Image;
 import android.net.Uri;
@@ -13,8 +14,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -34,20 +40,36 @@ public class RegisterActivity extends AppCompatActivity {
     private  EditText regEmailText,regPassText,regConfirmPassText,Username;
     private Button register_Button,login_reg;
     private ImageView imageView;
-    private DatabaseReference users;
+    private DatabaseReference users,catorgy;
     private final static int gallery_intent=0;
     private Uri uri;
     private StorageReference storageReference;
+    private RadioGroup Rg;
+    private String type="";
+    private SharedPreferences sh;
+    private Spinner spinner;
+    private String specialist="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
 
-        users= FirebaseDatabase.getInstance().getReference().child("Users");
+        sh=getSharedPreferences("Type",MODE_PRIVATE);
+        users= FirebaseDatabase.getInstance().getReference();
+        catorgy=FirebaseDatabase.getInstance().getReference().child("Catorgy");
         storageReference= FirebaseStorage.getInstance().getReference();
-
         imageView=(ImageView)findViewById(R.id.register_profile_image);
+        Rg=(RadioGroup)findViewById(R.id.radioGroup);
+        regEmailText=(EditText)findViewById(R.id.editText_reg_email);
+        regPassText=(EditText)findViewById(R.id.editText_reg_pass);
+        regConfirmPassText=(EditText)findViewById(R.id.editText_reg_pass_confirm);
+        Username=(EditText)findViewById(R.id.editText_username);
+        register_Button=(Button)findViewById(R.id.but_register);
+        login_reg=(Button)findViewById(R.id.but_login_reg);
+        spinner=(Spinner)findViewById(R.id.specialist_spinner);
+
+        spinner.setVisibility(View.INVISIBLE);
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,12 +83,43 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
 
-        regEmailText=(EditText)findViewById(R.id.editText_reg_email);
-        regPassText=(EditText)findViewById(R.id.editText_reg_pass);
-        regConfirmPassText=(EditText)findViewById(R.id.editText_reg_pass_confirm);
-        Username=(EditText)findViewById(R.id.editText_username);
-        register_Button=(Button)findViewById(R.id.but_register);
-        login_reg=(Button)findViewById(R.id.but_login_reg);
+        Rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+
+                switch (i){
+
+                    case R.id.patient:
+                        type="Users";
+                        spinner.setVisibility(View.INVISIBLE);
+                        break;
+
+                    case R.id.doctor:
+                        type="Doctors";
+                        spinner.setVisibility(View.VISIBLE);
+                        break;
+
+                }
+            }
+        });
+
+
+        FirebaseListAdapter<String> firebaseListAdapter=new FirebaseListAdapter<String>(
+                this,
+                String.class,
+                android.R.layout.simple_list_item_1,
+                catorgy
+        ) {
+            @Override
+            protected void populateView(View v, String model, int position) {
+
+                TextView txt=(TextView)v.findViewById(android.R.id.text1);
+                txt.setText(model);
+                specialist=model;
+            }
+        };
+        spinner.setAdapter(firebaseListAdapter);
+
 
         register_Button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,17 +129,29 @@ public class RegisterActivity extends AppCompatActivity {
                 String RegisterPass=regPassText.getText().toString().trim();
                 String RegisterConfirmPass=regConfirmPassText.getText().toString().trim();
 
-                if ( ! TextUtils.isEmpty(RegisterEmail) && ! TextUtils.isEmpty(RegisterPass) && ! TextUtils.isEmpty(RegisterConfirmPass))
+                if ( ! TextUtils.isEmpty(RegisterEmail) && ! TextUtils.isEmpty(RegisterPass) && ! TextUtils.isEmpty(RegisterConfirmPass) && ! type.equals(""))
                 {
                     if (RegisterPass.equals(RegisterConfirmPass))
                     {
 
+                        SharedPreferences.Editor editor=sh.edit();
+
+                        if (type.equalsIgnoreCase("Users")){
+                            users=users.child("Users");
+                            editor.putString("UserType",type);
+                            editor.commit();
+                        }else if (type.equalsIgnoreCase("Doctors")){
+                            editor.putString("UserType",type);
+                            editor.commit();
+                            users=users.child("Doctors");
+                    }
                     FirebaseAuth.getInstance().createUserWithEmailAndPassword(RegisterEmail,RegisterPass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()){
                                 FirebaseUser firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
                                 users.child(firebaseUser.getUid().toString()).child("name").setValue(name);
+                                users.child(firebaseUser.getUid().toString()).child("Specialist").setValue(specialist);
                                 if (uri != null)
                                 {
                                     uploadProfileImage(storageReference, uri, users);
@@ -132,19 +197,21 @@ public class RegisterActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         Bitmap resized=null;
-    if (requestCode==gallery_intent  &&  resultCode==RESULT_OK){
-       uri=data.getData();
-    }
+        if(resultCode != RESULT_CANCELED) {
 
-        try {
-            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-            resized = Bitmap.createScaledBitmap(bitmap, 100, 120, true);
-        } catch (IOException e) {
-            e.printStackTrace();
+            if (requestCode == gallery_intent && resultCode == RESULT_OK) {
+                uri = data.getData();
+            }
+
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                resized = Bitmap.createScaledBitmap(bitmap, 100, 120, true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            imageView.setImageBitmap(resized);
+
         }
-        imageView.setImageBitmap(resized);
-
-
     }
     void uploadProfileImage(StorageReference s, Uri imageUri, final DatabaseReference databaseReference){
         StorageReference filepath=s.child("ProfileImage").child(imageUri.getLastPathSegment());

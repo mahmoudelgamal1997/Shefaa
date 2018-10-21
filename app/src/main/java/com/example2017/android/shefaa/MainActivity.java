@@ -2,6 +2,7 @@ package com.example2017.android.shefaa;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.util.SortedList;
@@ -36,75 +37,94 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference users;
     ListView listView;
     ImageView  ProfileImage;
+    SharedPreferences sh;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listView=(ListView)findViewById(R.id.listview_catorgy);
-        ProfileImage=(ImageView)findViewById(R.id.profile_image);
-        catorgy= FirebaseDatabase.getInstance().getReference().child("Catorgy");
-        users=FirebaseDatabase.getInstance().getReference().child("Users");
-        final FirebaseUser firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
-        users.child(firebaseUser.getUid().toString()).child("ProfileImage").addValueEventListener(new ValueEventListener() {
+        listView = (ListView) findViewById(R.id.listview_catorgy);
+        ProfileImage = (ImageView) findViewById(R.id.profile_image);
+        catorgy = FirebaseDatabase.getInstance().getReference().child("Catorgy");
+        users = FirebaseDatabase.getInstance().getReference();
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+
+        ProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onClick(View view) {
 
-                final String imageuri=dataSnapshot.getValue(String.class);
-
-                Picasso.with(getApplicationContext()).load(imageuri).networkPolicy(NetworkPolicy.OFFLINE).into(ProfileImage, new Callback() {
-                    @Override
-                    public void onSuccess() {
-
-                    }
-
-                    @Override
-                    public void onError() {
-
-                        Picasso.with(getApplicationContext()).load(imageuri).into(ProfileImage);
-                    }
-                });
-
-
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
+                Intent intent =new Intent(MainActivity.this,ProfileDr.class);
+                startActivity(intent);
             }
         });
 
 
-        FirebaseListAdapter<String> firebaseListAdapter=new FirebaseListAdapter<String>(
-                this,
-                String.class,
-                R.layout.listview_catorgy_item,
-                catorgy
-        ) {
-            @Override
-            protected void populateView(View v, final String model, int position) {
 
-                TextView txt=(TextView)v.findViewById(R.id.txt_catorgy);
-                txt.setText(model);
+        if (firebaseUser != null) {
 
-                v.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                    Intent intent=new Intent(MainActivity.this,Posts.class);
-                    intent.putExtra("Catorgy",model);
-                    startActivity(intent);
-
-                    }
-                });
-            }
-        };
+            sh=getSharedPreferences("Type",MODE_PRIVATE);
+            String type =sh.getString("UserType","");
 
 
-        listView.setAdapter(firebaseListAdapter);
+            users.child(type).child(firebaseUser.getUid().toString()).child("ProfileImage").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
+                    final String imageuri = dataSnapshot.getValue(String.class);
+
+                    Picasso.with(getApplicationContext()).load(imageuri).placeholder(R.drawable.default_image).networkPolicy(NetworkPolicy.OFFLINE).into(ProfileImage, new Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onError() {
+
+                            Picasso.with(getApplicationContext()).load(imageuri).placeholder(R.drawable.default_image).into(ProfileImage);
+                        }
+                    });
+
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+            FirebaseListAdapter<String> firebaseListAdapter = new FirebaseListAdapter<String>(
+                    this,
+                    String.class,
+                    R.layout.listview_catorgy_item,
+                    catorgy
+            ) {
+                @Override
+                protected void populateView(View v, final String model, int position) {
+
+                    TextView txt = (TextView) v.findViewById(R.id.txt_catorgy);
+                    txt.setText(model);
+
+                    v.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(MainActivity.this, Posts.class);
+                            intent.putExtra("Catorgy", model);
+                            startActivity(intent);
+
+                        }
+                    });
+                }
+            };
+
+
+            listView.setAdapter(firebaseListAdapter);
+
+        }
     }
-
 
 
 

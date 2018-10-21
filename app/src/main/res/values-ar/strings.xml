@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Shefaa</string>
+    <string name="Time">الوقت</string>
+    <string name="Username">اسم المستخدم</string>
+    <string name="YourText">ادخل النص</string>
+    <string name="doctor">طبيب</string>
+    <string name="email_hint">ادخل البريد الخاص بك</string>
+    <string name="pass_hint">الرقم السري</string>
+    <string name="patient">مريض</string>
+</resources>

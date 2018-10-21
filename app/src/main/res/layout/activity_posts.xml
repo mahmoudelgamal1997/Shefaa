@@ -23,7 +23,7 @@
         android:layout_margin="16dp"
         android:clickable="true"
         android:scaleType="fitXY"
-        android:src="@mipmap/action_search"
+        android:src="@drawable/writepost"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         />

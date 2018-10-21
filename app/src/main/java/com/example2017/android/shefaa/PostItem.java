@@ -5,6 +5,11 @@ package com.example2017.android.shefaa;
  */
 public class PostItem {
     String  PostText,PostTime,PostId,PostUserName,UserId,UserImage;
+    boolean like;
+
+    public boolean isLike() {
+        return like;
+    }
 
     public String getPostUserName() {
         return PostUserName;

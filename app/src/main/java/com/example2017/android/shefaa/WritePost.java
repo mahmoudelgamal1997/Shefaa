@@ -53,7 +53,6 @@ public class WritePost extends AppCompatActivity {
                     temp.child("PostText").setValue(text);
                     temp.child("PostTime").setValue(OrganizeTime());
                     temp.child("UserId").setValue(id);
-
                     users.child(id).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -63,6 +62,7 @@ public class WritePost extends AppCompatActivity {
                             String name  = dataSnapshot.child("name").getValue(String.class);
                             temp.child("UserImage").setValue(image);
                             temp.child("PostUserName").setValue(name);
+
                         }
 
                         @Override
@@ -72,7 +72,7 @@ public class WritePost extends AppCompatActivity {
                     });
 
                     Toast.makeText(WritePost.this, "تم اضافه المنشور بنجاح", Toast.LENGTH_SHORT).show();
-
+                    finish();
 
                 }else {
                     Toast.makeText(WritePost.this, "لا يوجد اتصال بالانترنت", Toast.LENGTH_SHORT).show();
