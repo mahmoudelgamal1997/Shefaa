@@ -30,11 +30,13 @@ import com.squareup.picasso.Picasso;
 public class Posts extends AppCompatActivity {
 
 
-    private DatabaseReference posts;
+    private DatabaseReference posts,likes;
     private RecyclerView mre;
     private FloatingActionButton fbtn;
     String id;
     boolean isLike;
+    FirebaseUser firebaseUser;
+    boolean mProcessLike =false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,12 +45,14 @@ public class Posts extends AppCompatActivity {
         Intent intent=getIntent();
         final String Catorgy=intent.getStringExtra("Catorgy");
 
-        FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
+         firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
          id=firebaseUser.getUid();
 
         posts= FirebaseDatabase.getInstance().getReference().child("Posts").child(Catorgy);
-        posts.keepSynced(true);
+        likes= FirebaseDatabase.getInstance().getReference().child("likes");
 
+        posts.keepSynced(true);
+        likes.keepSynced(true);
         fbtn=(FloatingActionButton)findViewById(R.id.fab);
 
         mre = (RecyclerView) findViewById(R.id.view);
@@ -87,14 +91,19 @@ public class Posts extends AppCompatActivity {
                 viewHolder.SetTitle(model.getPostText(),model.PostTime,model.getPostUserName());
                 viewHolder.SetImage(getApplicationContext(),model.getUserImage());
                 final ImageButton like = (ImageButton) viewHolder.view.findViewById(R.id.like);
+                final TextView numberOfLikes=(TextView)viewHolder.view.findViewById(R.id.numberOfLike);
 
-/*
-                posts.addValueEventListener(new ValueEventListener() {
+                ////////////////////////
+                likes.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        final String postId = String.valueOf(getRef(position).getKey());
+                        numberOfLikes.setText(String.valueOf(dataSnapshot.child(postId).getChildrenCount()));
 
-                        if (dataSnapshot.child("like").hasChild(id)){
+                        if (dataSnapshot.child(postId).hasChild(id)){
                             like.setImageResource(R.drawable.likeafter);
+                        }else{
+                            like.setImageResource(R.drawable.likebefor);
 
                         }
                     }
@@ -105,27 +114,31 @@ public class Posts extends AppCompatActivity {
                     }
                 });
 
-*/
+                /////////////////////////////////////////////////
+
+
                like.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         final String postId = String.valueOf(getRef(position).getKey());
 
+                        mProcessLike=true;
 
 
-                        posts.addValueEventListener(new ValueEventListener() {
+                        likes.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                if (dataSnapshot.child("like").hasChild(id)) {
-                                    like.setImageResource(R.drawable.likeafter);
-                                    posts.child(postId).child("like").setValue(true);
-
-                                } else {
-                                    posts.child(postId).child("like").setValue(false);
-
+                                if (mProcessLike) {
+                                    if (dataSnapshot.child(postId).hasChild(id)) {
+                                        //   like.setImageResource(R.drawable.likeafter);
+                                        likes.child(postId).child(id).removeValue();
+                                        mProcessLike=false;
+                                    } else {
+                                        likes.child(postId).child(id).setValue(model.getPostUserName());
+                                        mProcessLike=false;
+                                    }
                                 }
-
                             }
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
@@ -151,7 +164,7 @@ public class Posts extends AppCompatActivity {
     public  static  class Post_viewholder extends RecyclerView.ViewHolder {
 
         View view;
-
+        ImageButton like;
         public Post_viewholder(View itemView) {
             super(itemView);
 
@@ -160,17 +173,22 @@ public class Posts extends AppCompatActivity {
 
         }
 
+
+
         public void SetTitle(String Text,String Time,String UserName) {
 
             TextView describtion = (TextView) view.findViewById(R.id.textView_desc);
             TextView PostTime = (TextView) view.findViewById(R.id.TextTime);
             TextView Name = (TextView)view.findViewById(R.id.Text_username);
+            ImageButton like = (ImageButton)view.findViewById(R.id.like);
+
 
             Name.setText(UserName);
             describtion.setText(Text);
             PostTime.setText(Time);
 
         }
+
 
 
         public void SetImage(final Context cnt, final String img) {
