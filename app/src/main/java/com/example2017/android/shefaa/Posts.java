@@ -164,14 +164,14 @@ public class Posts extends AppCompatActivity {
     public  static  class Post_viewholder extends RecyclerView.ViewHolder {
 
         View view;
-        ImageButton like;
+
         public Post_viewholder(View itemView) {
             super(itemView);
-
             view = itemView;
-
-
         }
+
+
+
 
 
 
@@ -180,7 +180,6 @@ public class Posts extends AppCompatActivity {
             TextView describtion = (TextView) view.findViewById(R.id.textView_desc);
             TextView PostTime = (TextView) view.findViewById(R.id.TextTime);
             TextView Name = (TextView)view.findViewById(R.id.Text_username);
-            ImageButton like = (ImageButton)view.findViewById(R.id.like);
 
 
             Name.setText(UserName);

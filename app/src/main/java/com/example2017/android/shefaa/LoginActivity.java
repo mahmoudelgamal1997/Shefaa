@@ -2,18 +2,21 @@ package com.example2017.android.shefaa;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -41,8 +44,12 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        //to avoid keyboard from automatic appear
 
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        getSupportActionBar().hide();
+        //to avoid keyboard from automatic appear
+        setContentView(R.layout.activity_login);
 
 
         email=(EditText)findViewById(R.id.editText_email);
@@ -70,6 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                 }/* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+
 
 
 
@@ -172,9 +180,24 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
+
                             if (user != null)
                             {
-                            SentToMain();
+
+
+                                GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+                                if (acct != null) {
+                                    String personName = acct.getDisplayName();
+                                    String personGivenName = acct.getGivenName();
+                                    String personFamilyName = acct.getFamilyName();
+                                    String personEmail = acct.getEmail();
+                                    String personId = acct.getId();
+                                    Uri personPhoto = acct.getPhotoUrl();
+                                    Toast.makeText(LoginActivity.this, personName, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginActivity.this, personId, Toast.LENGTH_SHORT).show();
+
+                                }
+                                SentToMain();
 
                             }
                         } else {

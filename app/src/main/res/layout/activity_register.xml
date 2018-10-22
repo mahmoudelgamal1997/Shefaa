@@ -27,7 +27,12 @@
         android:id="@+id/editText_username"
         android:hint="@string/Username"
         android:layout_below="@+id/register_profile_image"
-        android:layout_marginTop="19dp" />
+        android:layout_marginTop="19dp"
+        android:textColor="#000000"
+        android:background="@drawable/edittext_background"
+        android:textColorHint="#9E9E9E"
+        android:padding="10dp"
+        />
 
 
     <EditText
@@ -36,7 +41,12 @@
         android:id="@+id/editText_reg_email"
         android:hint="@string/email_hint"
         android:layout_below="@+id/editText_username"
-        android:layout_marginTop="9dp" />
+        android:layout_marginTop="9dp"
+        android:textColor="#000000"
+        android:background="@drawable/edittext_background"
+        android:textColorHint="#9E9E9E"
+        android:padding="10dp"
+        />
 
     <EditText
         android:layout_width="match_parent"
@@ -44,7 +54,12 @@
         android:id="@+id/editText_reg_pass"
         android:hint="@string/pass_hint"
         android:layout_below="@+id/editText_reg_email"
-        android:layout_marginTop="9dp" />
+        android:layout_marginTop="9dp"
+        android:textColor="#000000"
+        android:background="@drawable/edittext_background"
+        android:textColorHint="#9E9E9E"
+        android:padding="10dp"
+        />
 
     <EditText
         android:layout_width="match_parent"
@@ -53,6 +68,10 @@
         android:hint="Confirm Pass"
         android:layout_marginTop="9dp"
         android:layout_below="@+id/editText_reg_pass"
+        android:textColor="#000000"
+        android:background="@drawable/edittext_background"
+        android:textColorHint="#9E9E9E"
+        android:padding="10dp"
         />
 
     <RadioGroup
