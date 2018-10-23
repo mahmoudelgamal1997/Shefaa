@@ -1,5 +1,6 @@
 package com.example2017.android.shefaa;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -8,11 +9,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
@@ -30,6 +34,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -40,7 +46,9 @@ public class LoginActivity extends AppCompatActivity {
     public final static int RC_SIGN_IN = 1;
     private FirebaseAuth mAuth;
     private SharedPreferences sh;
-
+    PopupWindow mpopup;
+    String type="Users";
+    DatabaseReference userlogin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
         register=(Button)findViewById(R.id.registerPage_but);
         GoogleBtn=(SignInButton) findViewById(R.id.GoogleBtn);
 
+        userlogin= FirebaseDatabase.getInstance().getReference();
          // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
@@ -171,7 +180,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
 
-
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -185,16 +193,28 @@ public class LoginActivity extends AppCompatActivity {
                             {
 
 
+
+
                                 GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
                                 if (acct != null) {
+                                    FirebaseUser firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
+                                     String id=firebaseUser.getUid();
                                     String personName = acct.getDisplayName();
                                     String personGivenName = acct.getGivenName();
                                     String personFamilyName = acct.getFamilyName();
                                     String personEmail = acct.getEmail();
                                     String personId = acct.getId();
                                     Uri personPhoto = acct.getPhotoUrl();
-                                    Toast.makeText(LoginActivity.this, personName, Toast.LENGTH_SHORT).show();
-                                    Toast.makeText(LoginActivity.this, personId, Toast.LENGTH_SHORT).show();
+                                    if (personPhoto ==null){
+
+                                         Uri uri= Uri.parse("https://firebasestorage.googleapis.com/v0/b/shefaa-a4632.appspot.com/o/ProfileImage%2Fdefault_image.png?alt=media&token=f533822e-58d7-4c5b-bf4d-500b0b7bd0f6");
+                                        userlogin.child(type).child(id).child("name").setValue(personName);
+                                        userlogin.child(type).child(id).child("ProfileImage").setValue(uri);
+                                    }else {
+
+                                        userlogin.child(type).child(id).child("name").setValue(personName);
+                                        userlogin.child(type).child(id).child("ProfileImage").setValue(personPhoto.toString());
+                                    }
 
                                 }
                                 SentToMain();

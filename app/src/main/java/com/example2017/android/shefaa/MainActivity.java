@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         if (firebaseUser != null) {
 
             sh=getSharedPreferences("Type",MODE_PRIVATE);
-            String type =sh.getString("UserType","");
+            String type =sh.getString("UserType","Users");
 
 
             users.child(type).child(firebaseUser.getUid().toString()).child("ProfileImage").addValueEventListener(new ValueEventListener() {

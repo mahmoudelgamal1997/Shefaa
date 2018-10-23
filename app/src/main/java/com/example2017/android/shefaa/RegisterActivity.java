@@ -42,7 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
     private ImageView imageView;
     private DatabaseReference users,catorgy;
     private final static int gallery_intent=0;
-    private Uri uri;
+    private Uri uri= Uri.parse("https://firebasestorage.googleapis.com/v0/b/shefaa-a4632.appspot.com/o/ProfileImage%2F58196?alt=media&token=4fec7ae4-af8d-4469-a950-0285f8f75986");
     private StorageReference storageReference;
     private RadioGroup Rg;
     private String type="";
@@ -152,6 +152,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 FirebaseUser firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
                                 users.child(firebaseUser.getUid().toString()).child("name").setValue(name);
                                 users.child(firebaseUser.getUid().toString()).child("Specialist").setValue(specialist);
+
                                 if (uri != null)
                                 {
                                     uploadProfileImage(storageReference, uri, users);

@@ -25,6 +25,7 @@ public class WritePost extends AppCompatActivity {
     EditText edittext;
     private DatabaseReference posts,temp,users;
     private Button upload;
+    boolean flag=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,37 +50,50 @@ public class WritePost extends AppCompatActivity {
                     FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                     String id = firebaseUser.getUid();
                     String text = edittext.getText().toString().trim();
-                    temp = posts.push();
-                    temp.child("PostText").setValue(text);
-                    temp.child("PostTime").setValue(OrganizeTime());
-                    temp.child("UserId").setValue(id);
-                    users.child(id).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
+                    String[] spam = {"احا", "خول", "متناك", "لبوه", "عرص", "معرص", "شرموط", "احبه", "زانيه", ""};
+                    for (int i = 0; i < spam.length - 1; i++) {
+                        if (text.contains(spam[i])) {
+                        flag = true;
+                    }}
+
+                    if (flag == false) {
+                        temp = posts.push();
+                        temp.child("PostText").setValue(text);
+                        temp.child("PostTime").setValue(OrganizeTime());
+                        temp.child("UserId").setValue(id);
+                        users.child(id).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
 
 
-                            String image = dataSnapshot.child("ProfileImage").getValue(String.class);
-                            String name  = dataSnapshot.child("name").getValue(String.class);
-                            temp.child("UserImage").setValue(image);
-                            temp.child("PostUserName").setValue(name);
+                                String image = dataSnapshot.child("ProfileImage").getValue(String.class);
+                                String name = dataSnapshot.child("name").getValue(String.class);
 
-                        }
+                                temp.child("UserImage").setValue(image);
+                                temp.child("PostUserName").setValue(name);
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                            }
 
-                        }
-                    });
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
 
-                    Toast.makeText(WritePost.this, "تم اضافه المنشور بنجاح", Toast.LENGTH_SHORT).show();
-                    finish();
+                            }
+                        });
 
-                }else {
-                    Toast.makeText(WritePost.this, "لا يوجد اتصال بالانترنت", Toast.LENGTH_SHORT).show();
-                }
+                        Toast.makeText(WritePost.this, "تم اضافه المنشور بنجاح", Toast.LENGTH_SHORT).show();
+                        finish();
 
 
-            }
+                    }else {
+                        Toast.makeText(WritePost.this, "المنشور يحتوي علي الفاظ ممنوعه", Toast.LENGTH_SHORT).show();
+
+                    }
+                    } else {
+                        Toast.makeText(WritePost.this, "لا يوجد اتصال بالانترنت", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                    }
         });
 
 

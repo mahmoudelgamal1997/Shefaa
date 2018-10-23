@@ -110,6 +110,7 @@
         android:layout_height="wrap_content"
         android:text="Creat a new account "
         android:id="@+id/but_register"
+        android:background="@drawable/button_background"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="59dp" />
@@ -119,6 +120,7 @@
         android:layout_height="wrap_content"
         android:text="Already have an account"
         android:id="@+id/but_login_reg"
+        android:background="@drawable/button_background"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>
