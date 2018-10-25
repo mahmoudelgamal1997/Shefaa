@@ -197,6 +197,11 @@ public class LoginActivity extends AppCompatActivity {
 
                                 GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
                                 if (acct != null) {
+
+                                    sh=getSharedPreferences("Type",MODE_PRIVATE);
+                                    SharedPreferences.Editor editor=sh.edit();
+                                    editor.putString("UserType","Users");
+                                    editor.commit();
                                     FirebaseUser firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
                                      String id=firebaseUser.getUid();
                                     String personName = acct.getDisplayName();

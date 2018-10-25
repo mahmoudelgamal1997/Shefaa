@@ -16,14 +16,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity"
-        />
+        <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".SetupActivity" />
         <activity android:name=".Posts" />
         <activity android:name=".WritePost" />
         <activity android:name=".ProfilePerson" />
-        <activity android:name=".ProfileDr"></activity>
+        <activity android:name=".ProfileDr" />
+        <activity android:name=".Comments"></activity>
     </application>
 
 </manifest>

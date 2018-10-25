@@ -7,4 +7,5 @@
     <string name="Time">Time</string>
     <string name="patient">patient</string>
     <string name="doctor">doctor</string>
+    <string name="writeComment">writeComment</string>
 </resources>

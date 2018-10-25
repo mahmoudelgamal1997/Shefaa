@@ -92,9 +92,19 @@ public class Posts extends AppCompatActivity {
 
                 viewHolder.SetTitle(model.getPostText(),model.PostTime,model.getPostUserName());
                 viewHolder.SetImage(getApplicationContext(),model.getUserImage());
-                final ImageButton like = (ImageButton) viewHolder.view.findViewById(R.id.like);
+                final ImageView like = (ImageView) viewHolder.view.findViewById(R.id.like);
                 final TextView numberOfLikes=(TextView)viewHolder.view.findViewById(R.id.numberOfLike);
+                final ImageView comment =(ImageView)viewHolder.view.findViewById(R.id.comment);
 
+                comment.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent=new Intent(Posts.this,Comments.class);
+                        final String postId = String.valueOf(getRef(position).getKey());
+                        intent.putExtra("PostId",postId);
+                        startActivity(intent);
+                    }
+                });
                 ////////////////////////
                 likes.addValueEventListener(new ValueEventListener() {
                     @Override
