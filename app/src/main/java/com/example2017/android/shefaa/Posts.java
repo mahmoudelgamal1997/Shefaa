@@ -31,7 +31,7 @@ import com.squareup.picasso.Picasso;
 public class Posts extends AppCompatActivity {
 
 
-    private DatabaseReference posts,likes;
+    private DatabaseReference posts,likes,comments;
     private RecyclerView mre;
     private FloatingActionButton fbtn;
     String id;
@@ -51,6 +51,7 @@ public class Posts extends AppCompatActivity {
 
         posts= FirebaseDatabase.getInstance().getReference().child("Posts").child(Catorgy);
         likes= FirebaseDatabase.getInstance().getReference().child("likes");
+        comments= FirebaseDatabase.getInstance().getReference().child("Comments");
 
         posts.keepSynced(true);
         likes.keepSynced(true);
@@ -95,6 +96,7 @@ public class Posts extends AppCompatActivity {
                 final ImageView like = (ImageView) viewHolder.view.findViewById(R.id.like);
                 final TextView numberOfLikes=(TextView)viewHolder.view.findViewById(R.id.numberOfLike);
                 final ImageView comment =(ImageView)viewHolder.view.findViewById(R.id.comment);
+                final TextView numberOfComments=(TextView)viewHolder.view.findViewById(R.id.numberOfComment);
 
                 comment.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -105,6 +107,28 @@ public class Posts extends AppCompatActivity {
                         startActivity(intent);
                     }
                 });
+
+
+                comments.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    final String postID=String.valueOf(getRef(position).getKey());
+                        long CommentsNumber = dataSnapshot.child(postID).getChildrenCount();
+
+                        numberOfComments.setText(String.valueOf(CommentsNumber));
+
+                        }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+
+
                 ////////////////////////
                 likes.addValueEventListener(new ValueEventListener() {
                     @Override
